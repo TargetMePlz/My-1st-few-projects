@@ -1,0 +1,54 @@
+@echo off
+
+chcp 65001 >nul
+
+title Geolocation Info Scraper
+
+setlocal enabledelayedexpansion
+
+:: Display ASCII Art
+echo  ██▓ ██▓███       ▄████ ▓█████  ▒█████   ██▓     ▒█████   ▄████▄   ▄▄▄     ▄▄▄█████▓ ██▓ ▒█████   ███▄    █ 
+echo ▓██▒▓██░  ██▒    ██▒ ▀█▒▓█   ▀ ▒██▒  ██▒▓██▒    ▒██▒  ██▒▒██▀ ▀█  ▒████▄   ▓  ██▒ ▓▒▓██▒▒██▒  ██▒ ██ ▀█   █ 
+echo ▒██▒▓██░ ██▓▒   ▒██░▄▄▄░▒███   ▒██░  ██▒▒██░    ▒██░  ██▒▒▓█    ▄ ▒██  ▀█▄ ▒ ▓██░ ▒░▒██▒▒██░  ██▒▓██  ▀█ ██▒
+echo ░██░▒██▄█▓▒ ▒   ░▓█  ██▓▒▓█  ▄ ▒██   ██░▒██░    ▒██   ██░▒▓▓▄ ▄██▒░██▄▄▄▄██░ ▓██▓ ░ ░██░▒██   ██░▓██▒  ▐▌██▒
+echo ░██░▒██▒ ░  ░   ░▒▓███▀▒░▒████▒░ ████▓▒░░██████▒░ ████▓▒░▒ ▓███▀ ░ ▓█   ▓██▒ ▒██▒ ░ ░██░░ ████▓▒░▒██░   ▓██░
+echo ░▓  ▒▓▒░ ░  ░    ░▒   ▒ ░░ ▒░ ░░ ▒░▒░▒░ ░ ▒░▓  ░░ ▒░▒░▒░ ░ ░▒ ▒  ░ ▒▒   ▓▒█░ ▒ ░░   ░▓  ░ ▒░▒░▒░ ░ ▒░   ▒ ▒ 
+echo  ▒ ░░▒ ░          ░   ░  ░ ░  ░  ░ ▒ ▒░ ░ ░ ▒  ░  ░ ▒ ▒░   ░  ▒     ▒   ▒▒ ░   ░     ▒ ░  ░ ▒ ▒░ ░ ░░   ░ ▒░
+echo  ▒ ░░░          ░ ░   ░    ░   ░ ░ ░ ▒    ░ ░   ░ ░ ░ ▒  ░          ░   ▒    ░       ▒ ░░ ░ ░ ▒     ░   ░ ░ 
+echo  ░                    ░    ░  ░    ░ ░      ░  ░    ░ ░  ░ ░            ░  ░         ░      ░ ░           ░ 
+echo                                                          ░                                                  
+echo  █████▒██▓ ███▄    █ ▓█████▄ ▓█████  ██▀███                     _.-----._                                      
+echo ▓██   ▒▓██▒ ██ ▀█   █ ▒██▀ ██▌▓█   ▀ ▓██ ▒ ██▒                .'.-'''''-.'._                                  
+echo ▒████ ░▒██▒▓██  ▀█ ██▒░██   █▌▒███   ▓██ ░▄█ ▒               //`.:#:'    `\\\                                 
+echo ░▓█▒  ░░██░▓██▒  ▐▌██▒░▓█▄   ▌▒▓█  ▄ ▒██▀▀█▄                ;; '           ;;'.__.===============,           
+echo ░▒█░   ░██░▒██░   ▓██░░▒████▓ ░▒████▒░██▓ ▒██▒              ||      IP     ||  __                 )           
+echo  ▒ ░   ░▓  ░ ▒░   ▒ ▒  ▒▒▓  ▒ ░░ ▒░ ░░ ▒▓ ░▒▓░  Made by™    ;;             ;;.'  '==============='           
+echo  ░      ▒ ░░ ░░   ░ ▒░ ░ ▒  ▒  ░ ░  ░  ░▒ ░ ▒░ ®TargetMePlz  \\           ///                                
+echo  ░ ░    ▒ ░   ░   ░ ░  ░ ░  ░    ░     ░░   ░                 ':.._____..:'~                                
+echo         ░           ░    ░       ░  ░   ░                      `'-----'`                                    
+
+:: Prompt user for IP address
+set /p ip="Enter the IP address to locate: "
+
+:: Section 1: Fetch geolocation data from ip-api
+echo Fetching geolocation data from ip-api.com...
+curl -s "http://ip-api.com/json/%ip%" > ipapi_geo.json
+echo Geolocation Data from ip-api:
+type ipapi_geo.json
+echo.
+
+:: Section 2: Fetch geolocation data from ipinfo.io
+echo Fetching geolocation data from ipinfo.io...
+curl -s "https://ipinfo.io/%ip%/json" > ipinfo_geo.json
+echo Geolocation Data from ipinfo.io:
+type ipinfo_geo.json
+echo.
+
+:: Section 3: WHOIS lookup using PowerShell
+echo Performing WHOIS lookup using PowerShell...
+powershell -Command "whois %ip% | Out-File -FilePath whois_data.txt"
+echo WHOIS Data for %ip%:
+type whois_data.txt
+
+echo.
+pause >nul

